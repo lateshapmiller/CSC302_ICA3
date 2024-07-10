@@ -1,0 +1,17 @@
+filename = '/content/drive/MyDrive/DATA/lego_setsHB.csv'
+counter = 0
+product_info = {}
+
+with open(filename, 'r') as fl:
+    next(fl)  # Skip the header
+    for line in fl:
+        tokens = line.strip().split(',')
+        product_id = tokens[4].strip()  # Assuming product_id is in tokens[4]
+        price = tokens[0].strip()  # Assuming price is in tokens[0]
+        difficulty = tokens[5].strip()  # Assuming difficulty is in tokens[5]
+        product_info[product_id] = (price, difficulty)
+        counter += 1
+        if counter == 1000:
+            break
+for key, (price, difficulty) in product_info.items():
+    print(key, price, difficulty, sep=", ")
