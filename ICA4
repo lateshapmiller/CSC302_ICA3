@@ -1,0 +1,21 @@
+import pandas as pd
+
+# Reading the CSV file using Pandas
+file_path = '/content/drive/MyDrive/DATA/lego_setsHB.csv'
+df = pd.read_csv(file_path)
+
+# 1. Use the .info() and .describe() functions to have an overall description of the dataset
+info = df.info()
+description = df.describe()
+
+# 2. Use boolean operators to find the Lego sets which have star_rating greater than or equal to 4
+high_rating_sets = df[df['star_rating'] >= 4]
+
+# 3. Find the number of Lego sets whose star_rating is greater than or equal to 4
+num_high_rating_sets = high_rating_sets['star_rating'].count()
+
+# 4. Find the average list price for the Lego sets whose star_rating is greater than or equal to 4
+average_price_high_rating_sets = high_rating_sets['list_price'].mean()
+
+# Display the results
+info, description, high_rating_sets.head(), num_high_rating_sets, average_price_high_rating_sets
