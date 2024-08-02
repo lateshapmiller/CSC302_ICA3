@@ -1,0 +1,40 @@
+library(dplyr)
+library(ggplot2)
+install.packages("lubridate")
+library(lubridate)  
+
+setwd("C:/Users/LateshaMiller/Downloads/DATA-20240710T005456Z-001/DATA")
+
+load("preprint_growth.rda")
+
+head(preprint_growth)
+
+biorxiv_growth <- preprint_growth %>%
+  filter(archive == "bioRxiv") %>%
+  filter(count > 0)
+
+preprints <- preprint_growth %>%
+  filter(archive %in% c("bioRxiv", "arXiv q-bio", "PeerJ Preprints")) %>%
+  filter(count > 0) %>%
+  mutate(archive = factor(archive, levels = c("bioRxiv", "arXiv q-bio", "PeerJ Preprints")))
+
+preprints_final <- preprints %>% filter(date == ymd("2017-01-01"))
+
+ggplot(preprints) +
+  aes(date, count, color = archive, fill = archive) +
+  geom_line(linewidth = 1) +  # Use linewidth instead of size
+  scale_y_continuous(
+    limits = c(0, 600), expand = c(0, 0),
+    name = "preprints / month",
+    sec.axis = dup_axis(
+      breaks = preprints_final$count,
+      labels = c("arXiv q-bio", "PeerJ Preprints", "bioRxiv"),
+      name = NULL
+    )
+  ) +
+  scale_x_date(name = "year", 
+               limits = c(ymd("2015-01-01"), ymd("2017-01-01"))) +  # Changed start date to 2015-01-01
+  scale_color_manual(values = c("#0072b2", "#D55E00", "#009e73"), 
+                     name = NULL) +
+  theme(legend.position = "none") +
+  ggtitle("Preprint Growth Over Time")
